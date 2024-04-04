@@ -1,0 +1,366 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package Formularios;
+
+import entregable2.Conexion;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author Academico
+ */
+public class Cuentas extends javax.swing.JFrame {
+
+    /**
+     * Creates new form Cuentas
+     */
+    public Cuentas() {
+        initComponents();
+        mostrarCuentas();
+    }
+public void mostrarCuentas(){
+        try{
+            Conexion cn = new Conexion();
+            
+            Statement statement = cn.conectar().createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Cuentas");
+            
+            DefaultTableModel modelo = (DefaultTableModel)tblCuentas.getModel();
+            modelo.setColumnCount(0);
+            modelo.setRowCount(0);
+            String[] columns = {"IDCuenta", "TipoDeCuenta", "Saldo", "Clave"};
+            
+            for(String column: columns){
+                modelo.addColumn(column);
+            }
+            
+            while(resultSet.next()){
+                String[] row = {
+                    String.valueOf(resultSet.getInt("IDCuenta")),
+                    resultSet.getString("TipoDeCuenta"),
+                    String.valueOf(resultSet.getString("Saldo")),
+                    String.valueOf(resultSet.getString("Clave")),
+
+                };
+                modelo.addRow(row);
+        }
+        tblCuentas.setModel(modelo);
+        } catch(SQLException e){
+            e.printStackTrace();           
+        }
+    }
+    
+    public void eliminarCuentas(){
+        try{
+            int idcuenta;
+            idcuenta = Integer.parseInt(txtIDCuenta.getText());        
+            Conexion cn = new Conexion();
+        
+            PreparedStatement preparedStatement = cn.conectar().prepareStatement("DELETE FROM Cuentas WHERE IDCuenta = ?");
+            preparedStatement.setInt(1, idcuenta); 
+        
+            int rows = preparedStatement.executeUpdate();
+            if(rows > 0){
+                JOptionPane.showMessageDialog(null, "Delete row succesfull");
+                mostrarCuentas();
+            } else {
+                JOptionPane.showMessageDialog(null, "Delete row fail");
+        }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void insertarCuentas(){
+        try{
+            int idcuenta = Integer.parseInt(txtIDCuenta.getText());
+            String tipo = txtTipo.getText();
+            int saldo = Integer.parseInt(txtSaldo.getText());
+            int clave = Integer.parseInt(txtClave.getText());
+
+            Conexion cn = new Conexion();
+            
+            PreparedStatement ps = 
+                     cn.conectar().prepareStatement("INSERT INTO Cuentas VALUES(?, ?, ?, ?)");
+            ps.setInt(1,idcuenta);
+            ps.setString(2,tipo);
+            ps.setInt(3,saldo);
+            ps.setInt(4,clave);
+             
+            int rows = ps.executeUpdate();
+            if(rows > 0){
+                JOptionPane.showMessageDialog(null, "Insert row succesfull");
+                mostrarCuentas();
+            } else {
+                JOptionPane.showMessageDialog(null, "Insert row fail");
+        } 
+        } catch(SQLException e){
+            e.printStackTrace();
+}
+    }
+    public void actualizarCuentas() {
+    try {
+            int idcuenta = Integer.parseInt(txtIDCuenta.getText());
+            String tipo = txtTipo.getText();
+            int saldo = Integer.parseInt(txtSaldo.getText());
+            int clave = Integer.parseInt(txtClave.getText());
+            
+            Conexion cn = new Conexion();
+            Connection connection = cn.conectar();
+        
+            PreparedStatement ps = 
+                     cn.conectar().prepareStatement("UPDATE Cuentas SET TipoDeCuenta = ?, Saldo = ?, Clave = ? WHERE IDCuenta = ?");
+        
+            ps.setString(1,tipo);
+            ps.setInt(2,saldo);
+            ps.setInt(3,clave);
+            ps.setInt(4,idcuenta);
+
+        int rows = ps.executeUpdate();
+        
+        if (rows > 0) {
+            JOptionPane.showMessageDialog(null, "Update row succesfull");
+            mostrarCuentas();
+        } else {
+            JOptionPane.showMessageDialog(null, "Update row succesfull");
+        }
+        connection.close();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCuentas = new javax.swing.JTable();
+        btnInsertar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        txtIDCuenta = new javax.swing.JTextField();
+        txtSaldo = new javax.swing.JTextField();
+        txtClave = new javax.swing.JTextField();
+        txtTipo = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("IDCuenta:");
+
+        jLabel2.setText("Tipo De Cuenta:");
+
+        jLabel3.setText("Saldo:");
+
+        jLabel4.setText("Clave:");
+
+        jLabel5.setText("Cuentas");
+
+        tblCuentas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblCuentas);
+
+        btnInsertar.setText("Insertar");
+        btnInsertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertarActionPerformed(evt);
+            }
+        });
+
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(198, 198, 198)
+                .addComponent(btnActualizar)
+                .addGap(36, 36, 36)
+                .addComponent(btnEliminar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(btnInsertar))
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSaldo)
+                            .addComponent(txtClave)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addComponent(jLabel2))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIDCuenta)
+                            .addComponent(txtTipo))))
+                .addGap(80, 80, 80))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(32, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(226, 226, 226))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jLabel5)
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtIDCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtClave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInsertar)
+                    .addComponent(btnActualizar)
+                    .addComponent(btnEliminar))
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(51, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
+        // TODO add your handling code here:
+        insertarCuentas();
+    }//GEN-LAST:event_btnInsertarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        // TODO add your handling code here:
+        actualizarCuentas();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
+        eliminarCuentas();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+private void tblCuentasMouseClicked(java.awt.event.MouseEvent evt){
+        int columns = tblCuentas.getSelectedColumn();
+        int row = tblCuentas.getSelectedRow();
+        
+        tblCuentas.getModel().getValueAt(row, 1);
+        tblCuentas.getModel().getValueAt(row, 2);
+        tblCuentas.getModel().getValueAt(row, 3);
+        tblCuentas.getModel().getValueAt(row, 4);
+        
+        txtIDCuenta.setText(String.valueOf(tblCuentas.getModel().getValueAt(row, 0)));
+        txtTipo.setText(String.valueOf(tblCuentas.getModel().getValueAt(row+1, 1)));
+        txtSaldo.setText(String.valueOf(tblCuentas.getModel().getValueAt(row+1, 2)));
+        txtClave.setText(String.valueOf(tblCuentas.getModel().getValueAt(row+1, 3)));
+
+    }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Cuentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Cuentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Cuentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Cuentas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Cuentas().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnInsertar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblCuentas;
+    private javax.swing.JTextField txtClave;
+    private javax.swing.JTextField txtIDCuenta;
+    private javax.swing.JTextField txtSaldo;
+    private javax.swing.JTextField txtTipo;
+    // End of variables declaration//GEN-END:variables
+}

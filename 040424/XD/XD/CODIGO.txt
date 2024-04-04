@@ -1,0 +1,160 @@
+CREATE DATABASE ROBOCOP;
+USE ROBOCOP
+
+CREATE TABLE Clientes(
+	IDCliente INT PRIMARY KEY NOT NULL,
+	DNI VARCHAR(8) NOT NULL,
+	Nombre VARCHAR(50) NOT NULL,
+	Apellido VARCHAR(50) NOT NULL,
+	Telefono VARCHAR(20) NOT NULL,
+	Direccion VARCHAR(100) NOT NULL,
+	Email VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Cuentas(
+	IDCuenta INT PRIMARY KEY NOT NULL,
+	TipoDeCuenta VARCHAR(20) NOT NULL,
+	Saldo VARCHAR(10) NOT NULL,
+	Clave VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Transacciones(
+	IDTransacciones INT PRIMARY KEY NOT NULL,
+	IDCuenta INT NOT NULL,
+	Destinatario VARCHAR(100) NOT NULL,
+	NumeroDeMovimientos VARCHAR(10) NOT NULL,
+	TipoDeTransaccion VARCHAR(100) NOT NULL,
+	Monto VARCHAR(10) NOT NULL,
+	FechaDeTransaccion VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE Empleados ( 
+IDEmpleado INT PRIMARY KEY NOT NULL, 
+DNI VARCHAR(8) NOT NULL, 
+Nombre VARCHAR(50) NOT NULL, 
+Apellido VARCHAR(50) NOT NULL, 
+Direccion VARCHAR(100) NOT NULL, 
+Telefono VARCHAR(20) NOT NULL, 
+Email VARCHAR(50) NOT NULL, 
+Cargo VARCHAR(50) NOT NULL, 
+Sucursal VARCHAR(50) NOT NULL, 
+Salario VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE Sucursal (
+IDSucursal INT PRIMARY KEY NOT NULL, 
+Localidad VARCHAR(50) NOT NULL, 
+Telefono VARCHAR (7) NOT NULL, 
+Gerente VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE PRESTAMOS ( 
+IDPrestamo INT PRIMARY KEY NOT NULL, 
+TipoDePrestamo VARCHAR(30) NOT NULL, 
+Monto VARCHAR(10) NOT NULL, 
+TasaDeInteres VARCHAR(10) NOT NULL, 
+FechaDeInicio VARCHAR(10) NOT NULL, 
+FechaDeTermino VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE Clientes_Cuentas ( 
+IDCliente INT PRIMARY KEY NOT NULL, 
+IDCuenta INT NOT NULL, 
+Propietario VARCHAR(20) NOT NULL, 
+Saldo VARCHAR(10) NOT NULL, 
+EstadoDeCuenta VARCHAR(10) NOT NULL
+);
+
+CREATE TABLE Retiro (
+IDRetiro VARCHAR(10) NOT NULL,
+IDCuenta VARCHAR(10) NOT NULL,
+Propietario VARCHAR(50) NOT NULL, Clave VARCHAR(50) NOT NULL,
+Monto VARCHAR(10) NOT NULL
+);
+
+INSERT INTO Clientes values('1', '11111111', 'Pedro', 'Castillo', '987654321', 'Lima', 'pcastillo@hotmail.com'),
+			('2', '11111112', 'Martin', 'Vizcarra', '912345678', 'Lurin', 'mvizcarra@outlook.com'),
+			('3', '11111113', 'Alan', 'Garcia', '987651234', 'Piura', 'agarcia@gmail.com'),
+			('4', '11111114', 'Alberto', 'Fujimori', '956781234', 'Ancash', 'afujimori@gmail.com'),
+			('5', '11111115', 'Pepe', 'Casas', '943215678', 'San Martin de Porres', 'pcasas@hotmail.com'), 
+            ('6', '11111116', 'Tito', 'Frozono', '912876543', 'Cuzco', 'tfrozono@outlook.com'), 
+            ('7', '11111117', 'Juan', 'Montenegro', '912348765', 'Madre de Dios', 'jmontenegro@hotmail.com'),
+			('8', '11111118', 'Diego', 'Teheran', '912345687', 'Loreto', 'dteheran@hotmail.com'),
+			('9', '11111119', 'Mirko', 'Ramos', '915432678', 'San Miguel', 'mramos@gmail.com'),
+			('10', '11111110', 'Daniel', 'Escudero', '975318642', 'Tacna', 'descudero@outlook.com');
+
+INSERT INTO Cuentas values('1', 'Débito', '1000', '1111'),
+			('2', 'Crédito', '2000', '1112'),
+			('3', 'Débito', '3000', '1113'),
+			('4', 'Débito', '4000', '1114'),
+			('5', 'Crédito', '5000', '1115'),
+			('6', 'Débito', '6000', '1116'),
+			('7', 'Débito', '7000', '1117'),
+			('8', 'Crédito', '8000', '1118'),
+			('9', 'Débito', '9000', '1119'),
+			('10', 'Crédito', '10000', '1110');
+
+INSERT INTO Transacciones values('1', '1', 'Ramon', '4', 'Interbancario', '200', '01-01-2024'),
+				('2', '2', 'Juanito', '6', 'Interbancario', '150', '02-01-2024'),
+				('3', '3', 'Toledo', '3', 'Interbancario', '300', '03-01-2024'),
+				('4', '4', 'Pedro', '8', 'Interbancario', '50', '04-01-2024'),
+				('5', '5', 'Manuel', '14', 'Interbancario', '500', '05-01-2024'),
+				('6', '6', 'Justin', '2', 'Interbancario', '400', '06-01-2024'),
+				('7', '7', 'Niel', '1', 'Interbancario', '450', '07-01-2024'), ('8', '8', 'Jhonatan', '7', 'Interbancario', '350', '08-01-2024'),
+				('9', '9', 'Jhon', '11', 'Interbancario', '250', '09-01-2024'),
+				('10', '10', 'Jorge', '5', 'Interbancario', '100', '10-01-2024');
+
+INSERT INTO Empleados values(1, '12345678', 'Juan', 'Pérez', 'Lima', '999999999', 'juan@hotmail.com', 'Gerente', 'Sucursal A', '5000'),
+			(2, '23456789', 'María', 'González', 'Apurimac', '999999998', 'maria@outlook.com','Asistente de Ventas', 'Sucursal B', '3000'),
+			(3, '34567890', 'Carlos', 'Martínez', 'San Martin de Porres', '999999997', 'carlos@gmail.com', 'Contador', 'Sucursal A', '4500'),
+			(4, '45678901', 'Ana', 'López', 'Cajamarca', '999999996', 'ana@gmail.com', 'Recepcionista', 'Sucursal C', '2800'),
+			(5, '56789012', 'Pedro', 'Sánchez', 'Piura', '999999995', 'pedro@hotmail.com', 'Técnico de Soporte', 'Sucursal B', '3200'),
+			(6, '67890123', 'Laura', 'Ramírez', 'Lambayeque', '999999994', 'laura@outlook.com', 'Analista de Marketing', 'Sucursal A', '3800'),
+			(7, '78901234', 'Javier', 'Díaz', 'Loreto', '999999993', 'javier@outlook.com', 'Asistente Administrativo', 'Sucursal C', '2900'),
+			(8, '89012345', 'Sofía', 'Fernández', 'Huanuco', '999999992', 'sofia@hotmail.com', 'Vendedor', 'Sucursal B', '3500'),
+			(9, '90123456', 'Diego', 'Gómez', 'Puno', '999999991', 'diego@gmail.com', 'Jefe de Producción', 'Sucursal A', '4800'), 
+			(10, '01234567', 'Elena', 'Hernández', 'Ica', '999999990', 'elena@gmail.com', 'Analista de Sistemas', 'Sucursal C', '4000');
+
+INSERT INTO Retiro values('1', '1', 'Pedro', '1111', '100'),
+			('2', '2', 'Martin', '1112', '250'),
+			('3', '3', 'Alan', '1113', '350'),
+			('4', '4', 'Alberto', '1114', '550'),
+			('5', '5', 'Pepe', '1115', '200'),
+			('6', '6', 'Tito', '1116', '50'),
+			('7', '7', 'Juan', '1117', '20'),
+			('8', '8', 'Diego', '1118', '100'),
+			('9', '9', 'Mirko', '1119', '200'),
+			('10', '10', 'Daniel', '1110', '500');
+
+INSERT INTO PRESTAMOS values('011', 'Hipoteca', '100000', '4%', '01-02-2024', '01-12-2024'),
+			('20', 'Personal', '4000', '7%', '01-02-2024', '01-12-2024'),
+			('30', 'Automotriz', '25000', '5%', '01-02-2024', '01-12-2024'),
+			('40', 'Hipoteca', '250000', '3%', '01-02-2024', '01-12-2024'),
+			('50', 'Personal', '8500', '8%', '01-02-2024', '01-12-2024'),
+			('60', 'Educación', '15000', '6%', '01-02-2024', '01-12-2024'),
+			('70', 'Automotriz', '30000', '5%', '01-02-2024', '01-12-2024'),
+			('80', 'Hipoteca', '125000', '4%', '01-02-2024', '01-12-2024'),
+			('90', 'Personal', '4500', '6%', '01-02-2024', '01-12-2024'),
+			('100', 'Educación', '12000', '4%', '01-02-2024', '01-12-2024');
+
+INSERT INTO Sucursal values('1', 'Lima', '5555551', 'Juan Pérez'),
+			('2', 'Loreto', '5555552', 'Juan Pérez'),
+			('3', 'Apurimac', '5555553', 'Juan Pérez'),
+			('4', 'Ica', '5555554', 'Juan Pérez'),
+			('5', 'Ucayali', '5555555', 'Juan Pérez'), 
+			('6', 'Callao', '5555556', 'Juan Pérez'),
+			('7', 'Ancash', '5555557', 'Juan Pérez'),
+			('8', 'Trujillo', '5555558', 'Juan Pérez'),
+			('9', 'Chiclayo', '5555559', 'Juan Pérez'),
+			('10', 'Piura', '5555550', 'Juan Pérez');
+
+INSERT INTO Clientes_Cuentas values('1', '1', 'Pedro', '2500', 'Activo'),
+				('2', '2', 'Martin', '3500', 'Activo'),
+				('3', '3', 'Alan', '4000', 'Activo'),
+				('4', '4', 'Alberto', '1000', 'Activo'),
+				('5', '5', 'Pepe', '1500', 'Activo'),
+				('6', '6', 'Tito', '2000', 'Activo'),
+				('7', '7', 'Juan', '500', 'Activo'),
+				('8', '8', 'Diego', '800', 'Activo'),
+				('9', '9', 'Mirko', '600', 'Activo'),
+				('10', '10', 'Daniel', '7000', 'Activo');
